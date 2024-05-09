@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { doc, setDoc } from "firebase/firestore";
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 
 
@@ -47,7 +47,7 @@ import { CommonModule } from '@angular/common';
 })
 
 
-export class DialogAddUserComponent implements OnInit{
+export class DialogAddUserComponent implements OnInit {
 
   user = new User();
   birthDate!: Date;
@@ -60,23 +60,23 @@ export class DialogAddUserComponent implements OnInit{
     this.users$ = collectionData(usersCollection, { idField: 'id' });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async saveUser() {
     this.user.birthDate = this.birthDate ? this.birthDate.getTime() : 0;
     this.loading = true;
 
     try {
-        const newUserRef = doc(collection(this.firestore, 'users'));
-        await setDoc(newUserRef, { ...this.user });
-        console.log('User successfully added:', newUserRef.id);
+      const newUserRef = doc(collection(this.firestore, 'users'));
+      await setDoc(newUserRef, { ...this.user });
+      console.log('User successfully added:', newUserRef.id);
     } catch (error) {
-        console.error('Error adding user to Firestore:', error);
+      console.error('Error adding user to Firestore:', error);
     } finally {
-        this.loading = false;
-        this.dialogRef.close();
+      this.loading = false;
+      this.dialogRef.close();
     }
-}
+  }
 
 
 }
