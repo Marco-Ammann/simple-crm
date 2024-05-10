@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -11,16 +11,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
 import { Firestore, collection } from '@angular/fire/firestore';
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from 'firebase/firestore';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
-
-
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -47,7 +48,6 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './dialog-add-user.component.scss',
 })
 
-
 export class DialogAddUserComponent implements OnInit {
   user = new User();
   birthDateInput = '';
@@ -62,10 +62,12 @@ export class DialogAddUserComponent implements OnInit {
     { value: 'Other', viewValue: 'Other' },
   ];
 
-  constructor(private firestore: Firestore, public dialogRef: MatDialogRef<DialogAddUserComponent>) { }
+  constructor(
+    private firestore: Firestore,
+    public dialogRef: MatDialogRef<DialogAddUserComponent>
+  ) {}
 
-  ngOnInit(): void { }
-
+  ngOnInit(): void {}
 
   /**
    * Saves the user in Firestore.
@@ -91,7 +93,6 @@ export class DialogAddUserComponent implements OnInit {
     }
   }
 
-
   /**
    * Validates the user data, including the birth date.
    * Converts the manually entered birth date to a valid `Date` object.
@@ -108,7 +109,6 @@ export class DialogAddUserComponent implements OnInit {
     return true;
   }
 
-
   /**
    * Parses the manually entered birth date to a `Date` object and checks if it is valid.
    * @returns {Date | null} A valid `Date` object if the input is correct, otherwise `null`.
@@ -117,7 +117,6 @@ export class DialogAddUserComponent implements OnInit {
     const parsedDate = new Date(this.birthDateInput);
     return isNaN(parsedDate.getTime()) ? null : parsedDate;
   }
-
 
   /**
    * Stores the current user in Firestore.
@@ -129,6 +128,4 @@ export class DialogAddUserComponent implements OnInit {
 
     await setDoc(newUserRef, { ...this.user });
   }
-
-  
 }

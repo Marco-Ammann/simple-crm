@@ -10,9 +10,8 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
   <div>
-
-
     <mat-form-field color="accent" class="mr-16" appearance="outline">
       <mat-label>First name</mat-label>
       <input [disabled]="loading" [(ngModel)]="user.firstName" matInput />
@@ -70,6 +69,13 @@
   <button color="warn" [disabled]="loading" mat-button [mat-dialog-close]="">
     Cancel
   </button>
-<button color="accent" [disabled]="loading" (click)="saveUser()" mat-button cdkFocusInitial>Save</button>
-
+  <button
+    color="accent"
+    [disabled]="loading"
+    (click)="saveUser()"
+    mat-button
+    cdkFocusInitial
+  >
+    Save
+  </button>
 </mat-dialog-actions>
