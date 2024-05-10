@@ -14,11 +14,12 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {  MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../models/user.class';
-import {  MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-dialog-edit-user',
@@ -40,10 +41,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     CommonModule,
     MatSelectModule,
   ],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './dialog-edit-user.component.html',
   styleUrl: './dialog-edit-user.component.scss',
 })
-export class DialogEditUserComponent implements OnInit{
+export class DialogEditUserComponent implements OnInit {
   loading = false;
   user!: User;
   birthDateInput: Date;
@@ -61,12 +63,38 @@ export class DialogEditUserComponent implements OnInit{
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { user: User },
-    public dialogRef: MatDialogRef<DialogEditUserComponent>
+    public dialogRef: MatDialogRef<DialogEditUserComponent>,
+    private firestore: Firestore
   ) {
     this.user = data.user;
     this.birthDateInput = new Date(this.user.birthDate);
   }
 
-  
-  saveUserDetails() {}
+  async saveUserDetails() {
+    this.loading = true;
+
+    if (!this.user.id) {
+      console.error('No user ID provided');
+      this.loading = false;
+      return;
+    }
+
+    const userRef = doc(this.firestore, `users/${this.user.id}`);
+
+    try {
+      await updateDoc(userRef, {
+        title: this.user.title,
+        firstName: this.user.firstName,
+        lastName: this.user.lastName,
+        email: this.user.email,
+        birthDate: this.birthDateInput.getTime(),
+      });
+
+      this.dialogRef.close();
+    } catch (error) {
+      console.error('Error updating user details:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
 }

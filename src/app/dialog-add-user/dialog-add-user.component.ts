@@ -84,7 +84,6 @@ export class DialogAddUserComponent implements OnInit {
 
     try {
       await this.saveUserToFirestore();
-      console.log('User successfully added:', this.user.id);
     } catch (error) {
       console.error('Error adding user to Firestore:', error);
     } finally {
