@@ -14,11 +14,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
-import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Firestore, collection } from '@angular/fire/firestore';
 import { doc, setDoc } from "firebase/firestore";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -41,6 +41,7 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     MatProgressBarModule,
     CommonModule,
+    MatSelectModule,
   ],
   templateUrl: './dialog-add-user.component.html',
   styleUrl: './dialog-add-user.component.scss',
@@ -48,22 +49,45 @@ import { CommonModule } from '@angular/common';
 
 
 export class DialogAddUserComponent implements OnInit {
-
   user = new User();
-  birthDate!: Date;
-  loading!: boolean;
+  birthDateInput = '';
+  loading = false;
 
-  users$: Observable<any[]>;
+  titles = [
+    { value: 'Mr.', viewValue: 'Mr.' },
+    { value: 'Mrs.', viewValue: 'Mrs.' },
+    { value: 'Ms.', viewValue: 'Ms.' },
+    { value: 'Dr.', viewValue: 'Dr.' },
+    { value: 'Prof.', viewValue: 'Prof.' },
+    { value: 'Other', viewValue: 'Other' },
+  ];
 
-  constructor(private firestore: Firestore, public dialogRef: MatDialogRef<DialogAddUserComponent>) {
-    const usersCollection = collection(this.firestore, 'users');
-    this.users$ = collectionData(usersCollection, { idField: 'id' });
+  constructor(private firestore: Firestore, public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
+
+  ngOnInit(): void {}
+
+
+  /**
+   * Konvertiert das manuelle Datum in ein `Date`-Objekt und prüft, ob es gültig ist.
+   */
+  parseBirthDate() {
+    const parsedDate = new Date(this.birthDateInput);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
   }
 
-  ngOnInit(): void { }
 
+  /**
+   * Speichert den Benutzer in Firestore.
+   */
   async saveUser() {
-    this.user.birthDate = this.birthDate ? this.birthDate.getTime() : 0;
+    const parsedDate = this.parseBirthDate();
+    this.user.birthDate = parsedDate ? parsedDate.getTime() : 0;
+
+    if (this.user.birthDate === 0) {
+      console.error('Ungültiges Geburtsdatum eingegeben.');
+      return;
+    }
+
     this.loading = true;
 
     try {
@@ -77,6 +101,4 @@ export class DialogAddUserComponent implements OnInit {
       this.dialogRef.close();
     }
   }
-
-
 }

@@ -4,3 +4,21 @@
   bottom: 56px;
 }
 
+
+.user-table {
+  width: 100%;
+
+  th {
+    color: rgba(255, 255, 255, 0.685);
+    text-align: start;
+  }
+}
+
+
+.table-row {
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}

@@ -3,7 +3,7 @@
 }
 
 .sidenav {
-  width: 300px;
+  width: 200px;
 }
 
 
@@ -13,6 +13,10 @@
   min-height: 64px;
   display: flex;
   align-items: center;
+  background-color: rgb(255, 255, 255);
+  img {
+    height: 50px;
+  }
 }
 
 mat-tooltbar, mat-toolbar-row {
@@ -45,6 +49,6 @@ mat-tooltbar, mat-toolbar-row {
 }
 
 .router-container {
-  padding: 16px 0 0 56px;
+  padding: 16px 56px 0 56px;
 }
 
