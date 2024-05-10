@@ -3,7 +3,7 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="Suchen..." #input>
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="userTableData" class="mat-elevation-z8">
 
     <!-- First Name Column -->
     <ng-container matColumnDef="title">
@@ -54,7 +54,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr class="table-row" [routerLink]="['/user/' + row.id]" (click)="logClick(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="table-row" [routerLink]="['/user/' + row.id]" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   <!-- No Data Row -->
   <tr class="mat-row" *matNoDataRow>

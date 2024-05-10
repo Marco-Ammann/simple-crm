@@ -1,3 +1,4 @@
 {
-  "eslint.codeActionsOnSave.rules": null
+  "eslint.codeActionsOnSave.rules": null,
+  "files.autoSave": "afterDelay"
 }
