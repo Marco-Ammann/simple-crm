@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { doc, Firestore, docData } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,6 @@ import { DialogEditUserComponent } from '../dialog-edit-user/dialog-edit-user.co
   styleUrls: ['./user-detail.component.scss'],
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
-  @ViewChild('adressMenu')
   menuTrigger!: MatMenuTrigger;
 
   user: User = new User();
@@ -94,6 +93,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   editUserDetail() {
-    this.dialog.open(DialogEditUserComponent);
+    const dialogRef = this.dialog.open(DialogEditUserComponent, {
+      data: { user: this.user },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
   }
 }

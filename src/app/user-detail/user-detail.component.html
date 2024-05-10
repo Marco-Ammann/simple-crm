@@ -7,7 +7,7 @@
     >
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #userMenu="matMenu">
+    <mat-menu #userMenu="matMenu" xPosition="before">
       <button mat-menu-item (click)="editUserDetail()">
         <mat-icon>edit</mat-icon>
         <span>edit</span>
@@ -30,7 +30,7 @@
   >
     <mat-icon>more_vert</mat-icon>
   </button>
-  <mat-menu #adressMenu="matMenu">
+  <mat-menu #adressMenu="matMenu" xPosition="before">
     <button mat-menu-item (click)="editMenu()">
       <mat-icon>edit</mat-icon>
       <span>edit</span>
