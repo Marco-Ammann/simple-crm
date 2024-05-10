@@ -18,7 +18,7 @@ import { Firestore, collection } from '@angular/fire/firestore';
 import { doc, setDoc } from "firebase/firestore";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CommonModule } from '@angular/common';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -62,38 +62,27 @@ export class DialogAddUserComponent implements OnInit {
     { value: 'Other', viewValue: 'Other' },
   ];
 
-  constructor(private firestore: Firestore, public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
+  constructor(private firestore: Firestore, public dialogRef: MatDialogRef<DialogAddUserComponent>) { }
 
-  ngOnInit(): void {}
-
-
-  /**
-   * Konvertiert das manuelle Datum in ein `Date`-Objekt und prüft, ob es gültig ist.
-   */
-  parseBirthDate() {
-    const parsedDate = new Date(this.birthDateInput);
-    return isNaN(parsedDate.getTime()) ? null : parsedDate;
-  }
+  ngOnInit(): void { }
 
 
   /**
-   * Speichert den Benutzer in Firestore.
+   * Saves the user in Firestore.
    */
   async saveUser() {
-    const parsedDate = this.parseBirthDate();
-    this.user.birthDate = parsedDate ? parsedDate.getTime() : 0;
+    this.loading = true;
+    const isUserValid = this.validateUser();
 
-    if (this.user.birthDate === 0) {
-      console.error('Ungültiges Geburtsdatum eingegeben.');
+    if (!isUserValid) {
+      console.error('Invalid user data');
+      this.loading = false;
       return;
     }
 
-    this.loading = true;
-
     try {
-      const newUserRef = doc(collection(this.firestore, 'users'));
-      await setDoc(newUserRef, { ...this.user });
-      console.log('User successfully added:', newUserRef.id);
+      await this.saveUserToFirestore();
+      console.log('User successfully added:', this.user.id);
     } catch (error) {
       console.error('Error adding user to Firestore:', error);
     } finally {
@@ -101,4 +90,45 @@ export class DialogAddUserComponent implements OnInit {
       this.dialogRef.close();
     }
   }
+
+
+  /**
+   * Validates the user data, including the birth date.
+   * Converts the manually entered birth date to a valid `Date` object.
+   * @returns {boolean} `true` if the user data is valid, otherwise `false`.
+   */
+  validateUser(): boolean {
+    const parsedDate = this.parseBirthDate();
+    this.user.birthDate = parsedDate ? parsedDate.getTime() : 0;
+
+    if (this.user.birthDate === 0) {
+      console.error('Invalid birth date entered.');
+      return false;
+    }
+    return true;
+  }
+
+
+  /**
+   * Parses the manually entered birth date to a `Date` object and checks if it is valid.
+   * @returns {Date | null} A valid `Date` object if the input is correct, otherwise `null`.
+   */
+  parseBirthDate(): Date | null {
+    const parsedDate = new Date(this.birthDateInput);
+    return isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+
+  /**
+   * Stores the current user in Firestore.
+   * @returns {Promise<void>} A promise that resolves once the user is saved.
+   */
+  async saveUserToFirestore(): Promise<void> {
+    const newUserRef = doc(collection(this.firestore, 'users'));
+    this.user.id = newUserRef.id;
+
+    await setDoc(newUserRef, { ...this.user });
+  }
+
+  
 }

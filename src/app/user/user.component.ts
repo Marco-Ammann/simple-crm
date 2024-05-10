@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
-import { FormControl } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
@@ -17,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { Firestore, collection, collectionData, DocumentData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { doc, setDoc } from "firebase/firestore";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 
 @Component({
@@ -34,6 +33,8 @@ import { doc, setDoc } from "firebase/firestore";
     MatInputModule,
     MatTableModule,
     CommonModule,
+    RouterLink,
+    RouterLinkActive,
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
@@ -41,11 +42,20 @@ import { doc, setDoc } from "firebase/firestore";
 
 
 export class UserComponent implements OnInit {
+
+  /** Columns displayed in the user table. */
   displayedColumns: string[] = ['title', 'firstName', 'lastName', 'email', 'birthDate', 'street', 'zipCode', 'city'];
+
+  /** Data source for the user table. */
   dataSource = new MatTableDataSource<User>();
 
-  constructor(private firestore: Firestore, public dialog: MatDialog) {}
 
+  constructor(private firestore: Firestore, public dialog: MatDialog) { }
+
+
+  /**
+   * Initializes the component, loads the user data from Firestore, and sets it to the data source.
+   */
   ngOnInit(): void {
     const usersCollection = collection(this.firestore, 'users');
     const users$: Observable<User[]> = collectionData(usersCollection, { idField: 'id' }).pipe(
@@ -57,20 +67,31 @@ export class UserComponent implements OnInit {
     });
   }
 
+
+  /**
+   * Opens the dialog to add a new user.
+   */
   openDialog() {
     this.dialog.open(DialogAddUserComponent);
   }
 
+
+  /**
+   * Applies a filter to the user table based on the input event.
+   * @param {Event} event - The event object containing the filter input.
+   */
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+
   /**
-   * Gibt die Daten der angeklickten Zeile im Console-Log aus.
-   * @param user - Das angeklickte `User`-Objekt
+   * Logs the clicked user's data to the console.
+   * @param {User} user - The clicked user object.
    */
   logClick(user: User) {
-    console.log('Geklickter Benutzer:', user);
+    console.log('Clicked user:', user);
   }
+  
 }

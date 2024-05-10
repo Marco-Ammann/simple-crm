@@ -54,7 +54,7 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr class="table-row" (click)="logClick(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="table-row" [routerLink]="['/user/' + row.id]" (click)="logClick(row)" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   <!-- No Data Row -->
   <tr class="mat-row" *matNoDataRow>

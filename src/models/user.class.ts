@@ -1,4 +1,5 @@
 export class User {
+  id?: string;
   title: string;
   firstName: string;
   lastName: string;
@@ -9,6 +10,7 @@ export class User {
   email: string;
 
   constructor(obj?: any) {
+    this.id = obj ? obj.id : '';
     this.title = obj ? obj.title : '';
     this.firstName = obj ? obj.firstName : '';
     this.lastName = obj ? obj.lastName : '';
