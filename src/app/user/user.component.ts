@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 import { Firestore, collection, collectionData, DocumentData } from '@angular/fire/firestore';
 import { Observable, Subscription } from 'rxjs';
@@ -34,11 +36,15 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
 export class UserComponent implements OnInit, OnDestroy {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   /**
    * Columns displayed in the user table.
    */
@@ -72,6 +78,8 @@ export class UserComponent implements OnInit, OnDestroy {
 
     this.usersSubscription = users$.subscribe((users) => {
       this.userTableData.data = users;
+      this.userTableData.paginator = this.paginator;
+      this.userTableData.sort = this.sort;
     });
   }
 
