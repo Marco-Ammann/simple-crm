@@ -5,7 +5,7 @@ export class User {
   lastName: string = '';
   birthDate: number = 0;
   street: string = '';
-  zipCode: number = 0;
+  zipCode?: number;
   city: string = '';
   email: string = '';
 
