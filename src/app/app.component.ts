@@ -19,12 +19,11 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     RouterLinkActive,
     RouterLink,
-    MatDividerModule,
+    MatDividerModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 
 export class AppComponent {
-  title = 'simple-crm';
 }

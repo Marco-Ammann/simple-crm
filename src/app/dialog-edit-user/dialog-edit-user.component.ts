@@ -17,6 +17,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
+
 @Component({
   selector: 'app-dialog-edit-user',
   standalone: true,
@@ -68,7 +69,7 @@ export class DialogEditUserComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  
+
   /**
    * Saves the updated user details to Firestore.
    * Updates the Firestore document and closes the dialog.
