@@ -9,7 +9,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatFormField, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../models/user.class';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 
 @Component({
-  selector: 'app-dialog-edit-adress',
+  selector: 'app-dialog-edit-address',
   standalone: true,
   imports: [
     MatDialogContent,
@@ -25,7 +25,6 @@ import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
     MatDialogClose,
     MatButtonModule,
     MatSelectModule,
-    MatFormField,
     MatProgressBarModule,
     CommonModule,
     FormsModule,
@@ -34,17 +33,28 @@ import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
     MatDialogTitle,
   ],
   templateUrl: './dialog-edit-adress.component.html',
-  styleUrl: './dialog-edit-adress.component.scss',
+  styleUrls: ['./dialog-edit-adress.component.scss'],
 })
+
 export class DialogEditAdressComponent implements OnInit {
   loading = false;
   user!: User;
 
+  /**
+   * Constructor for DialogEditAdressComponent.
+   * @param {MatDialogRef} dialogRef - Reference to the dialog instance.
+   * @param {Firestore} firestore - Firestore service for database operations.
+   */
   constructor(public dialogRef: MatDialogRef<DialogEditAdressComponent>, private firestore: Firestore) {}
 
   ngOnInit(): void {}
 
-  async saveAddress() {
+  
+  /**
+   * Saves the updated address to Firestore.
+   * Updates the Firestore document and closes the dialog.
+   */
+  async saveAddress(): Promise<void> {
     this.loading = true;
 
     if (!this.user.id) {
@@ -54,12 +64,14 @@ export class DialogEditAdressComponent implements OnInit {
     }
 
     const userRef = doc(this.firestore, `users/${this.user.id}`);
+
     try {
       await updateDoc(userRef, {
         street: this.user.street,
         zipCode: this.user.zipCode,
         city: this.user.city
       });
+
       this.dialogRef.close();
     } catch (error) {
       console.error('Error updating address:', error);

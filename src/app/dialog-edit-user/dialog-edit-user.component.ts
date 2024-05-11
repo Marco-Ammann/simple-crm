@@ -4,12 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
   MatDialogModule,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +13,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { User } from '../../models/user.class';
 import { MatIconModule } from '@angular/material/icon';
-import { MatNativeDateModule, MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
@@ -28,10 +24,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDialogModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogTitle,
     MatInputModule,
     MatIconModule,
     MatDatepickerModule,
@@ -41,9 +33,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     CommonModule,
     MatSelectModule,
   ],
-  providers: [provideNativeDateAdapter()],
   templateUrl: './dialog-edit-user.component.html',
-  styleUrl: './dialog-edit-user.component.scss',
+  styleUrls: ['./dialog-edit-user.component.scss'],
 })
 export class DialogEditUserComponent implements OnInit {
   loading = false;
@@ -59,8 +50,13 @@ export class DialogEditUserComponent implements OnInit {
     { value: 'Other', viewValue: 'Other' },
   ];
 
-  ngOnInit(): void {}
 
+  /**
+   * Constructor for DialogEditUserComponent.
+   * @param {Object} data - The data passed to the dialog, containing the user object.
+   * @param {MatDialogRef} dialogRef - Reference to the dialog instance.
+   * @param {Firestore} firestore - Firestore service for database operations.
+   */
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { user: User },
     public dialogRef: MatDialogRef<DialogEditUserComponent>,
@@ -70,7 +66,14 @@ export class DialogEditUserComponent implements OnInit {
     this.birthDateInput = new Date(this.user.birthDate);
   }
 
-  async saveUserDetails() {
+  ngOnInit(): void {}
+
+  
+  /**
+   * Saves the updated user details to Firestore.
+   * Updates the Firestore document and closes the dialog.
+   */
+  async saveUserDetails(): Promise<void> {
     this.loading = true;
 
     if (!this.user.id) {

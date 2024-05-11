@@ -40,14 +40,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatSortModule
   ],
   templateUrl: './user.component.html',
-  styleUrl: './user.component.scss',
+  styleUrls: ['./user.component.scss'],
 })
+
 export class UserComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  /**
-   * Columns displayed in the user table.
-   */
+
   displayedColumns: string[] = [
     'title',
     'firstName',
@@ -59,16 +58,20 @@ export class UserComponent implements OnInit, OnDestroy {
     'city',
   ];
 
-
   userTableData = new MatTableDataSource<User>();
 
   private usersSubscription!: Subscription;
 
-  constructor(private firestore: Firestore, public dialog: MatDialog) { }
-
+  /**
+   * Constructor for UserComponent.
+   * @param {Firestore} firestore - Firestore service for database operations.
+   * @param {MatDialog} dialog - Material Dialog service for modals.
+   */
+  constructor(private firestore: Firestore, public dialog: MatDialog) {}
 
   /**
-   * Initializes the component, loads the user data from Firestore, and assigns it to the data source.
+   * Initializes the component, loads user data from Firestore,
+   * and assigns it to the data source with sorting and pagination.
    */
   ngOnInit(): void {
     const usersCollection = collection(this.firestore, 'users');
@@ -85,7 +88,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
 
   /**
-   * Cleans up subscriptions when the component is destroyed.
+   * Cleans up subscriptions when the component is destroyed to prevent memory leaks.
    */
   ngOnDestroy(): void {
     if (this.usersSubscription) {
@@ -97,18 +100,17 @@ export class UserComponent implements OnInit, OnDestroy {
   /**
    * Opens the dialog to add a new user.
    */
-  openDialog() {
+  openDialog(): void {
     this.dialog.open(DialogAddUserComponent);
   }
 
 
   /**
    * Applies a filter to the user table based on the input event.
-   * @param event - The event object containing the filter input.
+   * @param {Event} event - The event object containing the filter input.
    */
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.userTableData.filter = filterValue.trim().toLowerCase();
   }
-
 }
